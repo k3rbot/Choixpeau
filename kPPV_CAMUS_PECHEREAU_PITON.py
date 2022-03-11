@@ -89,7 +89,6 @@ def best_k(tab: list) -> int:
     Entrée: Une liste de personnages
     Sortie: Le nombre de voisins le plus précis
     """
-
     nb_test = 100
     best = 0
     for k in range(1, 20):
@@ -125,6 +124,20 @@ def house(tab: list, caracter: dict, k: int) -> str:
     neighbours = sorted(caracters, key=lambda x: x['Distance'])
     return best_house(neighbours[:k]), neighbours[:k]
 
+def new_profil():
+    '''
+    bonus
+    crée un nouveau personnage
+    
+    Sortie : '''
+    new = {}
+    skills ={"Courage" , "Ambition","Intelligence","Good"}
+    print("aptitude sur dix en : ")
+    for i in skills :
+        skill = int(input(f"{i} ? : "))
+        new[i] = skill
+    return new
+
 
 def main():
     """
@@ -132,6 +145,23 @@ def main():
     """
 
     while True:
+        choice = int(input("veux-tu créer un nouveau profil : 1 ,  en utilisé un existant : 2  ?  "))
+        if choice == 1 :
+            caracteres = new_profil()
+        elif choice == 2 :
+            caracteres.append(EXAMPLES)
+            
+        for i in caracteres :
+            house, neighbours = house(caracters, ex, k)
+            print(f"vos voisin: {neighbours}\n  nous apprennent dans quelle maison vous aurez le plus de chance d'aller {house}.")
+            k = best_k(caracters)
+            print(f"Best k = {k}")
+        response = input("veux tu sortir de la boucle ?  ")
+        if response == "oui":
+            return                 
+                        
+                        
+                        
         # for ex in EXAMPLES:
         #     house, neighbours = house(caracters, ex, k)
         #     print(f"Your neighbours: {neighbours}\n Can teach us that you're very likely to go in {house}.")
