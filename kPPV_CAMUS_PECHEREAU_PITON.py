@@ -11,11 +11,11 @@ k = 5
 
 with open("Joueurs_rugby_6_nations.csv", mode='r', encoding='utf-8') as f:
     dict_file = csv.DictReader(f, delimiter=';')
-    joueurs = []
+    caracters = []
     for id, elt in enumerate(dict_file):
-        joueurs.append({'Id': id})
+        caracters.append({'Id': id})
         for key, value in elt.items():
-            joueurs[id].update({key : (int(float(value)) if key == 'Masse (kg)' or key == 'Taille (cm)' or key == 'Age' else value)})
+            caracters[id].update({key : (int(float(value)) if key == 'Masse (kg)' or key == 'Taille (cm)' or key == 'Age' else value)})
 
 
 def distance(perso1: dict, perso2: dict) -> float:
@@ -76,10 +76,10 @@ def test_data(tab: list) -> list:
     """
 
     caracters_test = []
-    copie_caracters = tab[:]
-    for _ in range(len(copie_caracters) // 4):
-        caracters_test.append(copie_caracters.pop(randint(0, len(copie_caracters) - 1)))
-    return caracters_test, copie_caracters
+    caracters_copy = tab[:]
+    for _ in range(len(caracters_copy) // 4):
+        caracters_test.append(caracters_copy.pop(randint(0, len(caracters_copy) - 1)))
+    return caracters_test, caracters_copy
 
 
 def best_k(tab: list) -> int:
