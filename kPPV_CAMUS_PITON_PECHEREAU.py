@@ -40,8 +40,8 @@ def add_distances(tab: list, unknown_caracter: dict) -> list:
     Sortie: Le tableau de dictionnaires avec les distances ajoutées
     """
 
-    for joueur in tab:
-        joueur['Distance'] = distance(unknown_caracter, joueur)
+    for caracter in tab:
+        caracter['Distance'] = distance(unknown_caracter, caracter)
     return tab
 
 
@@ -50,7 +50,7 @@ def best_house(neighbours: list) -> str:
     Renvoie la maison apparaissant le plus dans la liste des plus proches voisins
 
     Entrée: Liste des plus proches voisins
-    Sortie: La maison apparaissant le plus parmis la liste des voisins
+    Sortie: La maison apparaissant le plus parmi la liste des voisins
     """
 
     houses = {}
@@ -75,11 +75,11 @@ def test_data(tab: list) -> list:
     Sortie: Une liste contenant les 3/4 de la liste originelle
     """
 
-    joueurs_test = []
-    copie_joueurs = tab[:]
-    for _ in range(len(copie_joueurs) // 4):
-        joueurs_test.append(copie_joueurs.pop(randint(0, len(copie_joueurs) - 1)))
-    return joueurs_test, copie_joueurs
+    caracters_test = []
+    copie_caracters = tab[:]
+    for _ in range(len(copie_caracters) // 4):
+        caracters_test.append(copie_caracters.pop(randint(0, len(copie_caracters) - 1)))
+    return caracters_test, copie_caracters
 
 
 def best_k(tab: list) -> int:
@@ -95,7 +95,7 @@ def best_k(tab: list) -> int:
     for k in range(1, 20):
         guessed_right = 0
         print(f"Calculating % of sucess with {k} neighbour{'s' if k > 1 else ''}...")
-        for test in range(nb_test):
+        for _ in range(nb_test):
             caracters_test, reference_caracters = test_data(tab)
             for target in caracters_test:
                 reference_caracters = add_distances(reference_caracters, target)
@@ -127,10 +127,16 @@ def house(tab: list, caracter: dict, k: int) -> str:
 
 
 def main():
-    # for ex in EXAMPLES:
-    #     house, neighbours = house(caracters, ex, k)
-    #     print(f"Vos voisins: {neighbours}\n Permettent de nous faire penser que vous ferez partie de {house}.")
-    k = best_k(joueurs)
-    print(f"Best k = {k}")
+    """
+    Boucle principale
+    """
+
+    while True:
+        # for ex in EXAMPLES:
+        #     house, neighbours = house(caracters, ex, k)
+        #     print(f"Your neighbours: {neighbours}\n Can teach us that you're very likely to go in {house}.")
+        k = best_k(caracters)
+        print(f"Best k = {k}")
+        return
 
 main()
