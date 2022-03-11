@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import csv
 from math import sqrt
 from random import randint
@@ -9,13 +11,26 @@ EXAMPLES = [{'Courage': 9, 'Ambition': 2, 'Intelligence': 8, 'Good': 9},
             {'Courage': 3, 'Ambition': 4, 'Intelligence': 8, 'Good': 8}]
 k = 5
 
-with open("Joueurs_rugby_6_nations.csv", mode='r', encoding='utf-8') as f:
-    dict_file = csv.DictReader(f, delimiter=';')
-    caracters = []
-    for id, elt in enumerate(dict_file):
-        caracters.append({'Id': id})
-        for key, value in elt.items():
-            caracters[id].update({key : (int(float(value)) if key == 'Masse (kg)' or key == 'Taille (cm)' or key == 'Age' else value)})
+# Création de notre table contenant les personnages et leurs caractéristiques
+# à partir de deux fichiers
+with open("Characters.csv", mode='r', encoding='utf-8') as f:
+        characters_file = csv.DictReader(f, delimiter=';')
+        characters_prev = [{key : value.replace('\xa0', ' ') for key, value in element.items()} for element in characters_file]
+
+with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as g:
+        characteristics_file = csv.DictReader(g, delimiter=';')
+        characteristics = [{key : value.replace('\xa0', ' ') for key, value in element.items()} for element in characteristics_file]
+
+characters = []
+for char in characters_prev:
+    for charact in characteristics:
+        if char['Name'] == charact['Name']:
+            characters.append(char)
+            char['Courage'] = int(float(charact['Courage']))
+            char['Intelligence'] = int(float(charact['Intelligence']))
+            char['Good'] = int(float(charact['Good']))
+            char['Ambition'] = int(float(charact['Ambition']))
+            break
 
 
 def distance(perso1: dict, perso2: dict) -> float:
@@ -26,12 +41,11 @@ def distance(perso1: dict, perso2: dict) -> float:
     Sortie: La distance euclidienne entre les deux personnages
     """
 
-    # return sqrt((perso2['Courage'] - perso1['Courage'])**2 + (perso2['Ambition'] - perso1['Ambition'])**2 + \
-        # (perso2['Intelligence'] - perso1['Intelligence'])**2 + (perso2['Good'] - perso1['Good'])**2)
-    return sqrt((perso2['Masse (kg)'] - perso1['Masse (kg)'])**2 + (perso2['Taille (cm)'] - perso1['Taille (cm)'])**2)
+    return sqrt((perso2['Courage'] - perso1['Courage'])**2 + (perso2['Ambition'] - perso1['Ambition'])**2 + \
+        (perso2['Intelligence'] - perso1['Intelligence'])**2 + (perso2['Good'] - perso1['Good'])**2)
 
 
-def add_distances(tab: list, unknown_caracter: dict) -> list:
+def add_distances(tab: list, unknown_character: dict) -> list:
     """
     Ajoute la distance par rapport à un personnage cible sur tous les personnage
 
@@ -40,8 +54,8 @@ def add_distances(tab: list, unknown_caracter: dict) -> list:
     Sortie: Le tableau de dictionnaires avec les distances ajoutées
     """
 
-    for caracter in tab:
-        caracter['Distance'] = distance(unknown_caracter, caracter)
+    for character in tab:
+        character['Distance'] = distance(unknown_character, character)
     return tab
 
 
@@ -55,10 +69,10 @@ def best_house(neighbours: list) -> str:
 
     houses = {}
     for neighbour in neighbours:
-        if neighbour['Poste'] in houses:
-            houses[neighbour['Poste']] += 1
+        if neighbour['House'] in houses:
+            houses[neighbour['House']] += 1
         else:
-            houses[neighbour['Poste']] = 1
+            houses[neighbour['House']] = 1
     max = 0
     for house, n in houses.items():
         if n > max:
@@ -75,11 +89,11 @@ def test_data(tab: list) -> list:
     Sortie: Une liste contenant les 3/4 de la liste originelle
     """
 
-    caracters_test = []
-    caracters_copy = tab[:]
-    for _ in range(len(caracters_copy) // 4):
-        caracters_test.append(caracters_copy.pop(randint(0, len(caracters_copy) - 1)))
-    return caracters_test, caracters_copy
+    characters_test = []
+    characters_copy = tab[:]
+    for _ in range(len(characters_copy) // 4):
+        characters_test.append(characters_copy.pop(randint(0, len(characters_copy) - 1)))
+    return characters_test, characters_copy
 
 
 def best_k(tab: list) -> int:
@@ -94,13 +108,11 @@ def best_k(tab: list) -> int:
     best = 0
     for k in range(1, 20):
         guessed_right = 0
-        print(f"Calculating % of sucess with {k} neighbour{'s' if k > 1 else ''}...")
         for _ in range(nb_test):
-            caracters_test, reference_caracters = test_data(tab)
-            for target in caracters_test:
-                reference_caracters = add_distances(reference_caracters, target)
-                neighbours = sorted(reference_caracters, key=lambda x: x['Distance'])
-                if best_house(neighbours[:k]) == target['Poste']:
+            characters_test, reference_characters = test_data(tab)
+            for target in characters_test:
+                char_house, neighbours = house(reference_characters, target, k)
+                if char_house == target['House']:
                     guessed_right += 1
         if guessed_right > best:
             best_k = k
@@ -109,7 +121,7 @@ def best_k(tab: list) -> int:
     return best_k
 
 
-def house(tab: list, caracter: dict, k: int) -> str:
+def house(tab: list, character: dict, k: int=5) -> str:
     """
     Calcule la meilleur maison pour un personnage inconnu en fonction
     du nombre de voisins sélectionnés
@@ -121,8 +133,8 @@ def house(tab: list, caracter: dict, k: int) -> str:
             Ses k plus proches voisins
     """
 
-    caracters = add_distances(tab, caracter)
-    neighbours = sorted(caracters, key=lambda x: x['Distance'])
+    characters = add_distances(tab, character)
+    neighbours = sorted(characters, key=lambda x: x['Distance'])
     return best_house(neighbours[:k]), neighbours[:k]
 
 
@@ -133,9 +145,9 @@ def main():
 
     while True:
         # for ex in EXAMPLES:
-        #     house, neighbours = house(caracters, ex, k)
+        #     house, neighbours = house(characters, ex, k)
         #     print(f"Your neighbours: {neighbours}\n Can teach us that you're very likely to go in {house}.")
-        k = best_k(caracters)
+        k = best_k(characters)
         print(f"Best k = {k}")
         return
 
