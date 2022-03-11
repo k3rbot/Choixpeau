@@ -103,6 +103,7 @@ def best_k(tab: list) -> int:
     Entrée: Une liste de personnages
     Sortie: Le nombre de voisins le plus précis
     """
+
     nb_test = 100
     best = 0
     for k in range(1, 20):
@@ -110,17 +111,17 @@ def best_k(tab: list) -> int:
         for _ in range(nb_test):
             characters_test, reference_characters = test_data(tab)
             for target in characters_test:
-                char_house, neighbours = house(reference_characters, target, k)
+                char_house, neighbours = house_of(reference_characters, target, k)
                 if char_house == target['House']:
                     guessed_right += 1
         if guessed_right > best:
             best_k = k
             best = guessed_right
-        print(f"With {k} neighbour{'s' if k > 1 else ''} we have {round(guessed_right/nb_test, 2)}% of sucess")
+        print(f"Avec {k} voisin{'s' if k > 1 else ''} nous avons {round(guessed_right/nb_test, 2)}% de succès.")
     return best_k
 
 
-def house(tab: list, character: dict, k: int=5) -> str:
+def house_of(tab: list, character: dict, k: int=5) -> str:
     """
     Calcule la meilleur maison pour un personnage inconnu en fonction
     du nombre de voisins sélectionnés
@@ -136,49 +137,65 @@ def house(tab: list, character: dict, k: int=5) -> str:
     neighbours = sorted(characters, key=lambda x: x['Distance'])
     return best_house(neighbours[:k]), neighbours[:k]
 
-def new_profil():
-    '''
-    bonus
-    crée un nouveau personnage
-    
-    Sortie : '''
-    new = {}
-    skills ={"Courage" , "Ambition","Intelligence","Good"}
-    print("aptitude sur dix en : ")
-    for i in skills :
-        skill = int(input(f"{i} ? : "))
-        new[i] = skill
-    return new
+
+def new_profile():
+    """
+    Demande à l'utilisateur des informations sur son personnage
+    pour créer un profil
+
+    Sortie : 
+    """
+
+    profile = {}
+    skills = {"Courage", "Ambition", "Intelligence", "Good"}
+    for skill in skills :
+        value = int(input(f"Votre {skill if skill != 'Good' else 'Bonté'} entre 0 et 10 : "))
+        assert value > 0 and value < 10, "Entrez une valeur correcte"
+        profile[skill] = value
+    return profile
 
 
 def main():
     """
     Boucle principale
     """
+    choice = ''
+    k = 5
 
     while True:
-        choice = int(input("veux-tu créer un nouveau profil : 1 ,  en utilisé un existant : 2  ?  "))
-        if choice == 1 :
-            caracteres = new_profil()
-        elif choice == 2 :
-            caracteres.append(EXAMPLES)
-            
-        for i in caracteres :
-            house, neighbours = house(caracters, ex, k)
-            print(f"vos voisin: {neighbours}\n  nous apprennent dans quelle maison vous aurez le plus de chance d'aller {house}.")
-            k = best_k(caracters)
-            print(f"Best k = {k}")
-        response = input("veux tu sortir de la boucle ?  ")
-        if response == "oui":
-            return                 
-                        
-                        
-                        
-        # for ex in EXAMPLES:
-        #     house, neighbours = house(characters, ex, k)
-        #     print(f"Your neighbours: {neighbours}\n Can teach us that you're very likely to go in {house}.")
-        k = best_k(characters)
-        print(f"Best k = {k}")
-        return
+        while True:
+            choice = input("Voulez-vous créer un nouveau profil plutôt que d'afficher les exemples ? (y/n) ")
+            if choice == 'y':
+                profile = new_profile()
+                house, neighbours = house_of(characters, profile, k)
+                print("\nVos voisins:")
+                for neighbour in neighbours:
+                        print(f"{neighbour['Name']}: ", f"Bonté: {neighbour['Good']},", f"Intelligence: {neighbour['Intelligence']},",\
+                             f"Ambition: {neighbour['Ambition']},", f"Courage: {neighbour['Courage'],}", f"Maison: {neighbour['House']}")
+                print(f"\nNous apprennent dans quelle maison vous aurez le plus de chance d'aller : {house}.\n")
+                break
+            elif choice == 'n':
+                for ppl in EXAMPLES:
+                    house, neighbours = house_of(characters, ppl, k)
+                    print("\nAvec ces voisins :")
+                    for neighbour in neighbours:
+                        print(neighbour['Name'], f"Bonté: {neighbour['Good']}", f"Intelligence: {neighbour['Intelligence']}",\
+                             f"Ambition: {neighbour['Ambition']}", f"Courage: {neighbour['Courage']}", f"Maison: {neighbour['House']}")
+                    print(f"\nCe personnage se retrouve chez {house}.\n")
+                break
+        while True:
+            choice = input("Voulez-vous utiliser le meilleur nombre de voisins ? (y/n) ")
+            if choice == 'y':
+                k = best_k(characters)
+                print(f"Le meilleur nombre de voisins est {k}")
+                break
+            elif choice == 'n':
+                while True:
+                    response = input("Voulez-vous sortir de la boucle ??? (y/n) ")
+                    if response == "y":
+                        return
+                    elif response == 'n':
+                        break
+                break
 
 main()
