@@ -6,8 +6,6 @@ import csv
 from math import sqrt
 from random import randint
 
-from sklearn.metrics import jaccard_score
-
 EXAMPLES = [{'Courage': 9, 'Ambition': 2, 'Intelligence': 8, 'Good': 9},
             {'Courage': 6, 'Ambition': 7, 'Intelligence': 9, 'Good': 7},
             {'Courage': 3, 'Ambition': 8, 'Intelligence': 6, 'Good': 3},
