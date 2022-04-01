@@ -12,7 +12,23 @@ h1 {
     margin-right: auto;
 }
 .button {
-    display: block;
+    background-color: #df960e; /* Green */
+    border: 2px solid #9400e9;
+    color: black;
+    padding: 16px 32px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 30px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 25px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 15px;
+}
+.button1:hover {
+    background-color: black;
+    border: 2px solid #0017e9;
+    color: #df960e;
 }
