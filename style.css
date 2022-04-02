@@ -1,19 +1,36 @@
 body {
-    background-color: black;
+    background-color: #1d1a1a;
 }
-h1 {
+div {
+    text-align: center;
+}
+#title {
+    display: block;
     text-align: center;
     color: #df960e;
     border: 5px double #742d80;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    font-size: 40px;
+}
+#question {
+    display: none;
+    border: 8px #df960e;
+    border-style: none none solid none;
+    margin-bottom: 30px;
+    padding: 1px 3px;
+    color: #ffffff;
+    font-size: 70px;
 }
 #houses_img {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
-.button {
-    background-color: #df960e; /* Green */
-    border: 2px solid #9400e9;
+#main {
+    background-color: #df960e;
+    border: 2px solid #df960e;
     color: black;
     padding: 16px 32px;
     margin-left: auto;
@@ -27,8 +44,29 @@ h1 {
     cursor: pointer;
     border-radius: 15px;
 }
-.button1:hover {
-    background-color: black;
+#main:hover {
+    background-color: #1d1a1a;
     border: 2px solid #0017e9;
     color: #df960e;
+}
+.answer {
+    display: none;
+    background-color: #86c226;
+    border: 2px solid #86c226;
+    color: black;
+    padding: 16px 32px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 25px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.answer:hover {
+    background-color: rgb(185, 40, 29);
+    border: 2px solid #ffffff;
+    color: black;
 }

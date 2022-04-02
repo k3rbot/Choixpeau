@@ -5,12 +5,20 @@
         <title>Quizz Maisons</title>
         <link rel="stylesheet" href="style.css">
         <link rel="icon" type="image/x-icon" href="/Images/favicon.ico">
+        <script type="text/javascript" src="/Brython/brython.js"></script>
+        <script type="text/javascript" src="/Brython/brython_stdlib.js"></script>
     </head>
-    <body>
-        <header>
-            <h1>Un super quizz pour déterminer votre maison Harry Potter !</h1>
-        </header>
+    <body onload="brython()">
+        <div>
+            <span id="title">Un super quizz pour déterminer votre maison Harry Potter !</span>
+            <span id="question"></span>
+        </div>
+        <script type="text/python" src="site.py"></script>
         <img src="/Images/favicon.ico" id="houses_img" >
-        <button class="button button1" id="1">Quizzzzz</button>
+        <button class="answer" id="1"></button>
+        <button class="answer" id="2"></button>
+        <button class="answer" id="3"></button>
+        <button class="answer" id="4"></button>
+        <button id="main">Quizzzzz</button>
     </body>
 </html>
