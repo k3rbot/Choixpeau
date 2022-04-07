@@ -7,20 +7,35 @@
         <link rel="icon" type="image/x-icon" href="/Images/favicon.ico">
         <script type="text/javascript" src="/Brython/brython.js"></script>
         <script type="text/javascript" src="/Brython/brython_stdlib.js"></script>
+        <script type="text/python" src="site.py"></script>
     </head>
     <body onload="brython()">
         <div>
             <span id="title">Un super quizz pour déterminer votre maison Harry Potter !</span>
             <span id="question"></span>
+            <img src="/Images/favicon.ico" id="houses_img">
         </div>
-        <script type="text/python" src="site.py"></script>
-        <img src="/Images/favicon.ico" id="houses_img" >
-        <form>
-            <label for="k">Nombre de voisins</label>
-            <input type="range" id="k" name="slider" min="1" max="15" value="5">
-            <label for="optimised_k">Meilleur nombre de voisins</label>
-            <input type="checkbox" id="optimised_k">
-        </form>
+        <table>
+            <td class="param">
+                <form>
+                    <div class="inputs">
+                        <label id="optimised_k_label" for="optimised_k">Meilleur nombre de voisins  </label>
+                        <input type="checkbox" id="optimised_k" class="checkbox">
+                    </div>
+                    <div class="inputs">
+                        <label id="k_label" for="k">Nombre de voisins:  <span id="nb_k">5</span></label>
+                        <input type="range" id="k" name="slider" min="1" max="15" value="5" , class="slider">
+                    </div>
+                </form>
+            </td>
+            <td class="images">
+                <img src="/Images/Hufflepuff.png" id="Hufflepuff_img">
+                <img src="/Images/Ravenclaw.png" id="Ravenclaw_img">
+                <img src="/Images/Slytherin.png" id="Slytherin_img">
+                <img src="/Images/Gryffindor.png" id="Gryffindor_img">
+            </td>
+            <td class="out"><span id="neighbours"></span></td>
+        </table>
         <button class="answer" id="0"></button>
         <button class="answer" id="1"></button>
         <button class="answer" id="2"></button>
