@@ -1,6 +1,6 @@
 from math import sqrt
 from random import randint
-from browser import document
+from browser import document, bind
 
 quizzing = False
 qa = [{"Question": "Voulez-vous avancer ?", "Answers": ["Non j'ai trop peur", "Oui je suis un bonhomme", "Pour quoi faire.."], "Values": ["Courage"], "Amount": [[-3], [3], [0]]},
@@ -18,7 +18,7 @@ def display_qa(event=None):
     for i in range(3, len(qa[qid]["Answers"]) -1, -1):
         document[str(i)].style.display = "none"
 
-
+@bind('#main', 'click')
 def start(event):
     global quizzing, qid
     if not quizzing:
@@ -44,20 +44,20 @@ def start(event):
         document["question"].style.display = "none"
 
 def end_menu():
-    print('end-menu')
+    document["title"].textContent = "Vos résultats !!!"
+    document["houses_img"].style.display = "block"
+    for i in range(4):
+        document[str(i)].style.display = "none"
+    document["question"].style.display = "none"
 
-
+@bind(".answer", 'click')
 def answer(event):
     global qid, profile
     for i in range(len(qa[qid]['Values'])):
         profile[qa[qid]['Values'][i]] = qa[qid]['Amount'][int(event.target.id)][i]
+    print(profile)
     if qid+1 < nb_q:
         qid += 1
         display_qa()
-        print(profile)
     else:
         end_menu()
-
-document["main"].bind("click", start)
-for i in range(4):
-    document[str(i)].bind("click", answer)

@@ -70,3 +70,12 @@ div {
     border: 2px solid #ffffff;
     color: black;
 }
+#optimised_k {
+    display: none;
+}
+#k {
+    display: none;
+}
+label {
+    display: none;
+}
