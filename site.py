@@ -18,7 +18,6 @@ with open("question.csv", mode='r', encoding='utf-8') as f:
             amounts.append(list(int(float(e)) for e in i.split(",")))
         element["Amount"] = amounts  
         question.append(element)
-print(question)
 
 
 quizzing = False
@@ -229,9 +228,10 @@ def answer(event):
 def slider_value(event):
     document["nb_k"].textContent = document['k'].value
 
-@bind('optimised_k_label', 'click')
-def optimise_k():
-    if document["optimised_k_label"].checked == True:
+@bind('#optimised_k', 'click')
+def optimise_k(event):
+    print(document["optimised_k"].checked)
+    if document["optimised_k"].checked:
         document['nb_k'].disabled = True
     else:
         document['nb_k'].disabled = False
