@@ -15,7 +15,7 @@ with open("question.csv", mode='r', encoding='utf-8') as f:
             else: element[key] = value
         amounts = []
         for i in element['Amount']:
-            amounts.append(list(int(float(e)) for e in value.split(",")))
+            amounts.append(list(int(float(e)) for e in i.split(",")))
         element["Amount"] = amounts  
         question.append(element)
 print(question)
@@ -194,10 +194,10 @@ def start(event):
         document["optimised_k"].style.display = 'none'
         document["k_label"].style.display = 'none'
         document["optimised_k_label"].style.display = 'none'
-        document["Hufflepuff.img"].style.display = 'none'
-        document["Slytherin.img"].style.display = 'none'
-        document["Ravenclaw.img"].style.display = 'none'
-        document["Gryffindor.img"].style.display = 'none'
+        document["Hufflepuff_img"].style.display = 'none'
+        document["Slytherin_img"].style.display = 'none'
+        document["Ravenclaw_img"].style.display = 'none'
+        document["Gryffindor_img"].style.display = 'none'
 
 
 def end_menu():
@@ -228,3 +228,10 @@ def answer(event):
 @bind('#k', 'mousemove')
 def slider_value(event):
     document["nb_k"].textContent = document['k'].value
+
+@bind('optimised_k_label', 'click')
+def optimise_k():
+    if document["optimised_k_label"].checked == True:
+        document['nb_k'].disabled = True
+    else:
+        document['nb_k'].disabled = False
