@@ -5,22 +5,18 @@ from browser import document, bind
 import csv
 
 amounts = []
-with open("question", mode='r', encoding='utf-8') as f:
+with open("question.csv", mode='r', encoding='utf-8') as f:
     question = []
     test_reader = csv.DictReader(f, delimiter=';')
     for element in test_reader:
         for key , value in element.items():
-            element[key] = value.split(":")    
-            
+            if key != 'Question':
+                element[key] = value.split(":")
+            else: element[key] = value
         amounts = []
-        
         for i in element['Amount']:
-            amounts.append(i.split(","))
-        
-        element["Amount"] = amounts
-        
-        
-            
+            amounts.append(list(int(float(e)) for e in value.split(",")))
+        element["Amount"] = amounts  
         question.append(element)
 print(question)
 
