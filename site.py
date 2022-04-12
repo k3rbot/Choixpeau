@@ -4,9 +4,10 @@ from random import randint
 from browser import document, bind
 import csv
 
+# Importation des questions
 amounts = []
 with open("question.csv", mode='r', encoding='utf-8') as f:
-    question = []
+    qa = []
     test_reader = csv.DictReader(f, delimiter=';')
     for element in test_reader:
         for key , value in element.items():
@@ -17,16 +18,13 @@ with open("question.csv", mode='r', encoding='utf-8') as f:
         for i in element['Amount']:
             amounts.append(list(int(float(e)) for e in i.split(",")))
         element["Amount"] = amounts  
-        question.append(element)
+        qa.append(element)
 
 
 quizzing = False
-qa = [{"Question": "Voulez-vous avancer ?", "Answers": ["Non j'ai trop peur", "Oui je suis un bonhomme", "Pour quoi faire.."], "Values": ["Courage"], "Amount": [[-3], [3], [0]]},
-      {"Question": "Partez vous ?", "Answers": ["Oui, il fait froid", "Oui je veux rentrer à temps", "Non", "Oui je ne vous aime pas"], "Values": ["Courage", "Intelligence"], "Amount": [[0, 0.25], [0, 1], [1, -0.25], [2, -1]]}]
 qid = 0
+nb_q = len(qa)
 profile = {'Intelligence': 0, 'Good': 0, 'Ambition': 0, 'Courage': 0}
-nb_q = 2
-
 k = 5
 
 # Création de notre table contenant les personnages et leurs caractéristiques
@@ -156,7 +154,11 @@ def house_of(tab: list, character: dict, k: int=5) -> tuple:
     return best_house(neighbours[:k]), neighbours[:k]
 
 
-def display_qa(event=None):
+def display_qa():
+    """
+    Affiche les différents boutons-réponses
+    """
+
     global qid
     document["question"].textContent = qa[qid]["Question"]
     for i in range(len(qa[qid]["Answers"])):
@@ -165,8 +167,15 @@ def display_qa(event=None):
     for i in range(3, len(qa[qid]["Answers"]) -1, -1):
         document[str(i)].style.display = "none"
 
+
 @bind('#main', 'click')
 def start(event):
+    """
+    Affiche le menu principal et permet de démarrer le mode quizz
+    où les question sont posées
+    (fonction appelée lors d'un clic sur le bouton principal)
+    """
+
     global quizzing, qid
     if not quizzing:
         quizzing = True
@@ -176,9 +185,9 @@ def start(event):
         document["main"].textContent = "Menu principal"
         document["main"].style.marginTop = "150px"
         document["main"].style.marginLeft = "25px"
+        document["buttons"].style.display = "block"
         qid = 0
         display_qa()
-
     else:
         quizzing = False
         document["title"].textContent = "Un super quizz pour déterminer votre maison Harry Potter !"
@@ -186,52 +195,87 @@ def start(event):
         document["main"].textContent = "Quizz"
         document["main"].style.marginTop = "30px"
         document["main"].style.marginLeft = "auto"
-        for i in range(4):
-            document[str(i)].style.display = "none"
+        document["buttons"].style.display = "none"
         document["question"].style.display = "none"
-        document["k"].style.display = 'none'
-        document["optimised_k"].style.display = 'none'
-        document["k_label"].style.display = 'none'
-        document["optimised_k_label"].style.display = 'none'
-        document["Hufflepuff_img"].style.display = 'none'
-        document["Slytherin_img"].style.display = 'none'
-        document["Ravenclaw_img"].style.display = 'none'
-        document["Gryffindor_img"].style.display = 'none'
+        document["table"].style.display = 'none'
 
 
 def end_menu():
+    """
+    Affiche le menu de fin annonçant la maison ainsi que les paramètres
+    de nombre de voisins
+    """
+
     document["title"].textContent = "Vos résultats !!!"
-    for i in range(4):
-        document[str(i)].style.display = "none"
-    document["k"].style.display = 'inline'
-    document["optimised_k"].style.display = 'inline'
-    document["k_label"].style.display = 'inline'
-    document["optimised_k_label"].style.display = 'inline'
+    document["buttons"].style.display = "none"
+    document["table"].style.display = 'table'
     house, neighbours = house_of(characters, profile, k)
     document["question"].textContent = "Félicitations, vous êtes :"
     document[house + '_img'].style.display = 'inline-block'
+    houses = ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"]
+    houses.remove(house)
+    for house_img in houses:
+        document[house_img + '_img'].style.display = 'none'
+    i = 0
+    for char in neighbours:
+        i += 1
+        document['neighbour_' + str(i)].textContent = f"{char['Name']}, {char['House']}"
+    for i in range(19, len(neighbours), -1):
+        document['neighbour_' + str(i)].textContent = ''
 
 
 @bind(".answer", 'click')
 def answer(event):
+    """
+    Ajoute certains points pour les différentes valeurs de la réponse
+    sélectionnée au profil du joueur
+    (fonction appelée lors d'un clic sur un bouton de réponse)
+    """
+
     global qid, profile
     for i in range(len(qa[qid]['Values'])):
-        profile[qa[qid]['Values'][i]] = qa[qid]['Amount'][int(event.target.id)][i]
+        profile[qa[qid]['Values'][i]] += qa[qid]['Amount'][int(event.target.id)][i]
     print(profile)
     if qid+1 < nb_q:
         qid += 1
         display_qa()
     else:
+        for value in profile:
+            profile[value] = profile[value]/(qid +1)
+        print(profile)
         end_menu()
 
+
 @bind('#k', 'mousemove')
-def slider_value(event):
+def slider_value(event=None):
+    """
+    Affiche le nombre de voisins sélectionnée grâce au slider
+    et réactualise la page pour changer le nombre de voisins
+    affichés
+    (fonction appelée au moindre mouvement sur le slider)
+    """
+
+    global k
     document["nb_k"].textContent = document['k'].value
+    k = int(document['k'].value)
+    end_menu()
+
 
 @bind('#optimised_k', 'click')
-def optimise_k(event):
-    print(document["optimised_k"].checked)
+def optimise_k_button(event):
+    """
+    Calcule le meilleur nombre de voisins lorsque le bouton
+    est cliqué en plus de désactiver le slider
+    (fonction appelée lors d'un clic sur le bouton k optimisé)
+    """
+
+    global k
     if document["optimised_k"].checked:
-        document['nb_k'].disabled = True
+        document['k'].disabled = True
+        document['opt_k_infos'].textContent = " Calcul en cours..."
+        k = best_k(characters)
+        document['opt_k_infos'].textContent = f"Meilleur k={k}"
+        document['k'].value = str(k)
+        slider_value()
     else:
-        document['nb_k'].disabled = False
+        document['k'].disabled = False

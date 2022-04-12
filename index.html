@@ -15,16 +15,22 @@
             <span id="question"></span>
             <img src="/Images/favicon.ico" id="houses_img">
         </div>
-        <table>
+        <table id="table">
+            <tr>
+                <th></th>
+                <th></th>
+                <th><span id="neighbour_title"><strong>Vos voisins :</strong></span></th>
+            </tr>
             <td class="param">
                 <form>
                     <div class="inputs">
                         <label id="optimised_k_label" for="optimised_k">Meilleur nombre de voisins  </label>
                         <input type="checkbox" id="optimised_k" class="checkbox">
+                        <span id="opt_k_infos"></span>
                     </div>
                     <div class="inputs">
                         <label id="k_label" for="k">Nombre de voisins:  <span id="nb_k">5</span></label>
-                        <input type="range" id="k" name="slider" min="1" max="15" value="5" , class="slider">
+                        <input type="range" id="k" name="slider" min="1" max="19" value="5" , class="slider">
                     </div>
                 </form>
             </td>
@@ -34,12 +40,34 @@
                 <img src="/Images/Slytherin.png" id="Slytherin_img">
                 <img src="/Images/Gryffindor.png" id="Gryffindor_img">
             </td>
-            <td class="out"><span id="neighbours"></span></td>
+            <td class="out">
+                <div id="neighbour_1" class="neighbour"></div>
+                <div id="neighbour_2" class="neighbour"></div>
+                <div id="neighbour_3" class="neighbour"></div>
+                <div id="neighbour_4" class="neighbour"></div>
+                <div id="neighbour_5" class="neighbour"></div>
+                <div id="neighbour_6" class="neighbour"></div>
+                <div id="neighbour_7" class="neighbour"></div>
+                <div id="neighbour_8" class="neighbour"></div>
+                <div id="neighbour_9" class="neighbour"></div>
+                <div id="neighbour_10" class="neighbour"></div>
+                <div id="neighbour_11" class="neighbour"></div>
+                <div id="neighbour_12" class="neighbour"></div>
+                <div id="neighbour_13" class="neighbour"></div>
+                <div id="neighbour_14" class="neighbour"></div>
+                <div id="neighbour_15" class="neighbour"></div>
+                <div id="neighbour_16" class="neighbour"></div>
+                <div id="neighbour_17" class="neighbour"></div>
+                <div id="neighbour_18" class="neighbour"></div>
+                <div id="neighbour_19" class="neighbour"></div>
+            </td>
         </table>
-        <button class="answer" id="0"></button>
-        <button class="answer" id="1"></button>
-        <button class="answer" id="2"></button>
-        <button class="answer" id="3"></button>
+        <div id="buttons">
+            <button class="answer" id="0"></button>
+            <button class="answer" id="1"></button>
+            <button class="answer" id="2"></button>
+            <button class="answer" id="3"></button>
+        </div>
         <button id="main">Quizzzzz</button>
     </body>
 </html>
