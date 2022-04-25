@@ -25,6 +25,7 @@ quizzing = False
 qid = 0
 nb_q = len(qa)
 profile = {'Intelligence': 0, 'Good': 0, 'Ambition': 0, 'Courage': 0}
+amount_of_qs_on = {'Intelligence': 10, 'Good': 11, 'Ambition': 10, 'Courage': 11}
 k = 5
 
 # Création de notre table contenant les personnages et leurs caractéristiques
@@ -241,7 +242,7 @@ def answer(event):
         display_qa()
     else:
         for value in profile:
-            profile[value] = profile[value]/(qid +1)
+            profile[value] = profile[value]/amount_of_qs_on[value]
         print(profile)
         end_menu()
 
